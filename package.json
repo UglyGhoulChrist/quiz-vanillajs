@@ -2,11 +2,13 @@
   "name": "quiz-vanillajs",
   "version": "1.0.0",
   "main": "index.js",
+  "homepage": "https://uglyghoulchrist.github.io/quiz-vanillajs/",
   "license": "MIT",
   "devDependencies": {
     "gh-pages": "^6.1.1"
   },
   "scripts": {
-    "deploy": "gh-pages -d ."
+    "deploy": "gh-pages -d .",
+    "dev": "tsc -w"
   }
 }
