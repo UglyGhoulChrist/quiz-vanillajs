@@ -1,4 +1,6 @@
-const questions = [
+import { IQuestion } from "../interfaces/interfaces"
+
+const questions: IQuestion[] = [
     {
         id: 0,
         title: "На фотографии изображен самец этой птицы, самочки же у этого вида не настолько яркие и нарядные.",
@@ -163,5 +165,5 @@ const questions = [
         image: "19.webp",
         background: "linear-gradient(220.16deg, #F39102 138%, #FFE101 -8%)"
     },
-];
-export default questions;
+]
+export default questions
