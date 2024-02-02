@@ -4,6 +4,11 @@ const questionsSlide = document.getElementById('questions-slide');
 const imagesSlide = document.getElementById('images-slide');
 const insertQuestions = document.getElementById('insert-questions-after-begin');
 const insertImages = document.getElementById('insert-images-after-begin');
+const modal = document.getElementById('modal');
+const modalContent = document.getElementById('modal-content');
+const modalTitle = document.getElementById('modal-title');
+const modalText = document.getElementById('modal-text');
+const modalButton = document.getElementById('modal-button');
 const questionsHtml = getQuestionsSlide(questions);
 const imagesHtml = getImagesSlide(questions);
 insertQuestions && insertQuestions.insertAdjacentHTML("afterend", questionsHtml);
@@ -19,8 +24,10 @@ addEventListener('click', (e) => {
         return;
     if (e.target.classList.contains('start-button'))
         changeSlide();
-    if (e.target.classList.contains('answer-button'))
+    if (e.target.id === 'modal-button') {
+        modal.classList.remove('modal_open');
         changeSlide();
+    }
     if (e.target.classList.contains('end-button'))
         window.location.reload();
 });
@@ -41,10 +48,27 @@ function changeSlide() {
 function checkCorrectnessAnswer(e) {
     if (!isHtmlElement(e.target))
         return;
-    const question = questions[e.target.name];
+    const question = questions[activeIndexSlide - 1];
     const correct = question.correct;
-    if (e.target[correct].checked)
+    modal.classList.add('modal_open');
+    if (e.target[correct].checked) {
+        modalContent.classList.remove('modal-content_wrong');
+        modalContent.classList.add('modal-content_right');
+        modalTitle.innerText = 'Правильно! Это:';
+        modalText.innerText = question.variants[correct];
         counterCorrectAnswers += 1;
+    }
+    else {
+        modalContent.classList.remove('modal-content_right');
+        modalContent.classList.add('modal-content_wrong');
+        if (e.target[0].checked || e.target[1].checked || e.target[2].checked) {
+            modalTitle.innerText = 'Не правильно. Это:';
+        }
+        else {
+            modalTitle.innerText = 'Это:';
+        }
+        modalText.innerText = question.variants[correct];
+    }
     if (question.id === countSlides - 3) {
         insertResult.innerText = (`${counterCorrectAnswers} из ${countSlides - 2} правильно!`);
     }
