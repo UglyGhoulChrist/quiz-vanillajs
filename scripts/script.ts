@@ -4,14 +4,23 @@ import { getQuestionsSlide, getImagesSlide } from "./generateHtml.js"
 
 // Получаю question-slide
 const questionsSlide = <HTMLElement>document.getElementById('questions-slide')
-
 // Получаю images-slide
 const imagesSlide = <HTMLElement>document.getElementById('images-slide')
-
 // Получаю место после которого нужно вставить вопросы
 const insertQuestions = <HTMLElement>document.getElementById('insert-questions-after-begin')
 // Получаю место после которого нужно вставить картинки
 const insertImages = <HTMLElement>document.getElementById('insert-images-after-begin')
+
+// Получаю modal
+const modal = <HTMLElement>document.getElementById('modal')
+// Получаю modal-content
+const modalContent = <HTMLElement>document.getElementById('modal-content')
+// Получаю modal-title
+const modalTitle = <HTMLElement>document.getElementById('modal-title')
+// Получаю modal-text
+const modalText = <HTMLElement>document.getElementById('modal-text')
+// Получаю modal-button
+const modalButton = <HTMLElement>document.getElementById('modal-button')
 
 // Получаю HTML разметку списка вопросов и списка картинок
 const questionsHtml: string = getQuestionsSlide(questions)
@@ -42,7 +51,11 @@ const isHtmlElement = (v: any): v is HTMLElement => v instanceof HTMLElement
 addEventListener('click', (e: Event) => {
     if (!isHtmlElement(e.target)) return
     if (e.target.classList.contains('start-button')) changeSlide()
-    if (e.target.classList.contains('answer-button')) changeSlide()
+    if (e.target.id === 'modal-button') {
+        modal.classList.remove('modal_open')
+        changeSlide()
+    }
+
     // Возврата на начало игры
     if (e.target.classList.contains('end-button')) window.location.reload()
 })
@@ -68,11 +81,31 @@ function changeSlide(): void {
 function checkCorrectnessAnswer(e: Event): void {
     if (!isHtmlElement(e.target)) return
     // Получаю вопрос на который отвечаю
-    const question: IQuestion = questions[e.target.name]
+    const question: IQuestion = questions[activeIndexSlide - 1]
     // Получаю правильный ответ вопроса
     const correct: 0 | 1 | 2 = question.correct
+
+    // Показываю модальное окно
+    modal.classList.add('modal_open')
+
     // Проверяю правильно ответил или нет
-    if (e.target[correct].checked) counterCorrectAnswers += 1
+    if (e.target[correct].checked) {
+        modalContent.classList.remove('modal-content_wrong')
+        modalContent.classList.add('modal-content_right')
+        modalTitle.innerText = 'Правильно! Это:'
+        modalText.innerText = question.variants[correct]
+        counterCorrectAnswers += 1
+    }
+    else {
+        modalContent.classList.remove('modal-content_right')
+        modalContent.classList.add('modal-content_wrong')
+        if (e.target[0].checked || e.target[1].checked || e.target[2].checked) {
+            modalTitle.innerText = 'Не правильно. Это:'
+        } else {
+            modalTitle.innerText = 'Это:'
+        }
+        modalText.innerText = question.variants[correct]
+    }
     // Проверяю последний ли был вопрос
     if (question.id === countSlides - 3) {
         // Выставляю оценку
