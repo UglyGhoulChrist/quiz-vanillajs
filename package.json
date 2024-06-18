@@ -1,14 +1,25 @@
 {
-  "name": "quiz-vanillajs",
-  "version": "1.0.0",
-  "main": "index.js",
-  "homepage": "https://uglyghoulchrist.github.io/quiz-vanillajs/",
-  "license": "MIT",
-  "devDependencies": {
-    "gh-pages": "^6.1.1"
-  },
-  "scripts": {
-    "deploy": "gh-pages -d .",
-    "dev": "tsc -w"
-  }
+    "name": "quiz-vanillajs",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "module",
+    "homepage": "https://uglyghoulchrist.github.io/quiz-vanillajs/",
+    "license": "MIT",
+    "devDependencies": {
+        "@rollup/plugin-typescript": "^11.1.6",
+        "gh-pages": "^6.1.1",
+        "rollup": "^4.18.0",
+        "typescript": "^5.4.5"
+    },
+    "scripts": {
+        "build": "rollup -c",
+        "watch": "rollup -c -w",
+        "deploy": "gh-pages -d ."
+    },
+    "dependencies": {
+        "rollup-plugin-commonjs": "^10.1.0",
+        "rollup-plugin-node-resolve": "^5.2.0",
+        "rollup-plugin-terser": "^7.0.2",
+        "rollup-plugin-typescript2": "^0.36.0"
+    }
 }
